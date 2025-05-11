@@ -4,7 +4,7 @@ import pandas as pd
 # Load unit data
 @st.cache_data
 def load_data():
-    return pd.read_csv("HOMM3_army_dashboard\data\H3Units_Enhanced.csv").set_index("Unit_name")
+    return pd.read_csv("data\H3Units_Enhanced.csv").set_index("Unit_name")
 
 df = load_data()
 
