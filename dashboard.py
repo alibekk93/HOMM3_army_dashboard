@@ -8,7 +8,7 @@ st.title("Heroes of Might and Magic III Army Power Calculator")
 # Load unit data
 @st.cache_data
 def load_data():
-    return pd.read_csv("data/H3Units_Enhanced.csv").set_index("Unit_name")
+    return pd.read_csv("H3Units_Enhanced.csv").set_index("Unit_name")
 
 df = load_data()
 
