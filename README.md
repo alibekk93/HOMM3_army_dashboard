@@ -1,4 +1,4 @@
-# Army Power Dashboard: A README.md
+# HOMM3 Army Power Dashboard
 
 > In the beginning, there was only chaos and the README, an eldritch slab of markdown, squatting at the root of every repo, staring back at you with the blank, expectant gaze of a peasant conscript about to meet a Black Dragon. Welcome, traveler, to the Army Power Dashboard, a Streamlit app where the mundane arithmetic of war is elevated to a cosmic ballet of numbers, spreadsheets, and existential dread.
 
