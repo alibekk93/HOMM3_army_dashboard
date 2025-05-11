@@ -1,16 +1,16 @@
 import streamlit as st
 import pandas as pd
 
+# Configure page
+st.set_page_config(layout="wide", page_title="HoMM III Army Calculator")
+st.title("Heroes of Might and Magic III Army Power Calculator")
+
 # Load unit data
 @st.cache_data
 def load_data():
     return pd.read_csv("data\H3Units_Enhanced.csv").set_index("Unit_name")
 
 df = load_data()
-
-# Configure page
-st.set_page_config(layout="wide", page_title="HoMM III Army Calculator")
-st.title("Heroes of Might and Magic III Army Power Calculator")
 
 # Army columns
 col_own, col_enemy = st.columns(2)
