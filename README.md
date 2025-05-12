@@ -99,3 +99,10 @@ A license as permissive as the wind, as indifferent as the grave.
 In the end, the dashboard is but a mirror. You gaze into it, searching for power, for victory, for meaning.  
 It gazes back, silent and implacable, and you realize:  
 The true enemy was the README all along.
+
+## 2Do
+- create fixed header
+- move total power and max speed to header
+- add images
+- move i to header
+- force count to be added first
