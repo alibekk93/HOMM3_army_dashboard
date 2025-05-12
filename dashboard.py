@@ -28,8 +28,9 @@ def get_abilities(special_abilities):
 
 def slot_ui(slot_num, army_type, key_prefix=""):
     with st.expander(f"Slot {slot_num}", expanded=True):
-        col1, col2 = st.columns([2, 1])
-        with col1:
+        # Row for unit name and count (with info icon)
+        name_col, count_col, info_col = st.columns([2, 1, 0.15])
+        with name_col:
             selected_unit = st.selectbox(
                 f"Unit Name {slot_num}",
                 options=[""] + unit_names,
@@ -37,10 +38,24 @@ def slot_ui(slot_num, army_type, key_prefix=""):
                 index=0,
                 format_func=lambda x: x if x else "Select unit..."
             )
-        with col2:
+        with count_col:
             count = st.number_input(
                 "Count", min_value=0, value=0, key=f"{key_prefix}_count_{slot_num}"
             )
+        with info_col:
+            info_html = """
+            <span style="font-size: 1.1em; cursor:pointer; color:#2c7be5;" 
+                title="Few 1-4
+Several 5-9
+Pack 10-19
+Lots 20-49
+Horde 50-99
+Throng 100-249
+Swarm 250-499
+Zounds 500-999
+Legion 1000+">&#8505;</span>
+            """
+            st.markdown(f"<div style='margin-top:2em'>{info_html}</div>", unsafe_allow_html=True)
 
         stats = None
         power_per_unit = 0
@@ -59,32 +74,18 @@ def slot_ui(slot_num, army_type, key_prefix=""):
             ranged_icon = "🏹 " if is_ranged(unit.Special_abilities) else ""
             abilities = get_abilities(unit.Special_abilities)
 
-            stat_col, power_col = st.columns([2, 1])
-            with stat_col:
-                st.markdown(
-                    f"**{ranged_icon}{selected_unit}**"
-                    + (f' <span style="background-color:#eee;border-radius:4px;padding:2px 6px;margin-left:8px;cursor:pointer;" title="{abilities}">Ability</span>' if abilities else ""),
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"""<div style="margin-top:0.5em;">
-                    <b>Stats:</b><br>
-                    Attack: {unit.Attack}<br>
-                    Defense: {unit.Defence}<br>
-                    Damage: {unit['Minimum Damage']}-{unit['Maximum Damage']}<br>
-                    Health: {unit.Health}<br>
-                    Speed: {unit.Speed}
-                    </div>""",
-                    unsafe_allow_html=True
-                )
-            with power_col:
-                st.markdown(
-                    f"""<div style="text-align:right;">
-                    <b>Power per unit:</b> {int(power_per_unit):,}<br>
-                    <b>Total slot power:</b> {int(slot_power):,}
-                    </div>""",
-                    unsafe_allow_html=True
-                )
+            # Stats and power in one column, as in your screenshot
+            st.markdown(
+                f"**Stats:**<br>"
+                f"Attack: {unit.Attack}<br>"
+                f"Defense: {unit.Defence}<br>"
+                f"Damage: {unit['Minimum Damage']}-{unit['Maximum Damage']}<br>"
+                f"Health: {unit.Health}<br>"
+                f"Speed: {unit.Speed}<br>"
+                f"<b>Power per unit:</b> {int(power_per_unit):,}<br>"
+                f"<b>Total slot power:</b> {int(slot_power):,}",
+                unsafe_allow_html=True
+            )
             stats = {
                 "power": slot_power,
                 "speed": speed
@@ -110,4 +111,5 @@ col_own, col_enemy = st.columns(2)
 with col_own:
     army_ui("Own", key_prefix="own")
 with col_enemy:
+    
     army_ui("Enemy", key_prefix="enemy")
