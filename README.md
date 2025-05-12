@@ -101,6 +101,7 @@ It gazes back, silent and implacable, and you realize:
 The true enemy was the README all along.
 
 ## 2Do
+- rollback slot to have ability and ranged
 - create fixed header
 - move total power and max speed to header
 - add images
