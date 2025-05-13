@@ -101,8 +101,7 @@ It gazes back, silent and implacable, and you realize:
 The true enemy was the README all along.
 
 ## 2Do
-- create fixed header
-- move total power and max speed to header
 - add images
-- move i to header
 - force count to be added first
+- 1 slot by default, 7 max and +
+- hide most slot content by default
