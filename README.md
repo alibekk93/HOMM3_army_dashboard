@@ -102,6 +102,3 @@ The true enemy was the README all along.
 
 ## 2Do
 - add images
-- force count to be added first
-- 1 slot by default, 7 max and +
-- hide most slot content by default
