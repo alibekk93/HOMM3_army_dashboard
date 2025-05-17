@@ -94,6 +94,23 @@ body {
     font-weight: 700;
     margin-top: 0.8em;
 }
+div.stButton > button.plus-btn {
+    font-size: 2em !important;
+    padding: 0.25em 0 !important;
+    margin-top: 1.2em !important;
+    background: #e9f5ff !important;
+    color: #2c7be5 !important;
+    border: 2px dashed #b1d0fa !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    width: 100% !important;
+    transition: background 0.2s, border-color 0.2s;
+}
+div.stButton > button.plus-btn:hover {
+    background: #d0eaff !important;
+    border-color: #2c7be5 !important;
+    color: #185a9d !important;
+}
 @media (max-width: 1100px) {
     .army-card { min-height: 0; }
 }
@@ -109,6 +126,12 @@ def load_data():
 
 df = load_data()
 unit_names = sorted(df.index.tolist())
+
+# --- SLOT STATE ---
+if "own_slots" not in st.session_state:
+    st.session_state["own_slots"] = 1
+if "enemy_slots" not in st.session_state:
+    st.session_state["enemy_slots"] = 1
 
 # --- HELPERS ---
 def is_ranged(special_abilities):
@@ -220,34 +243,43 @@ def army_stats(slot_stats):
 
 def army_ui(army_type, key_prefix=""):
     slot_stats = []
-    slot_inputs = []
-    # First, gather slot inputs without rendering
-    for i in range(1, 8):
-        # Save the current state for each slot to render after stats
-        slot_inputs.append((i, army_type, key_prefix))
-        # Compute stats for slots that already have values
-        selected_unit = st.session_state.get(f"{key_prefix}_unit_{i}", "")
-        count = st.session_state.get(f"{key_prefix}_count_{i}", 0)
-        if selected_unit and selected_unit in df.index and count > 0:
-            unit = df.loc[selected_unit]
-            power_per_unit = (
-                unit.Attack + unit.Defence + unit.Speed +
-                ((unit['Minimum Damage'] + unit['Maximum Damage']) / 2)
-            ) * unit.Health
-            slot_power = power_per_unit * count
-            speed = unit.Speed
-            slot_stats.append({"power": slot_power, "speed": speed})
-    # Calculate and display stats at the top
-    total_power, max_speed = army_stats(slot_stats)
-    st.markdown(
-        f'<div class="header-army-stats" style="margin-bottom:1.2em;">'
-        f'Total Power: <b>{total_power:,}</b> &nbsp;|&nbsp; Max Speed: <b>{max_speed}</b>'
-        f'</div>', unsafe_allow_html=True)
-    # Now render the slots
-    for args in slot_inputs:
-        slot_ui(*args)
-    return total_power, max_speed
+    slots_key = "own_slots" if key_prefix == "own" else "enemy_slots"
+    num_slots = st.session_state[slots_key]
 
+    # Render slots
+    for i in range(1, num_slots + 1):
+        stats = slot_ui(i, army_type, key_prefix=key_prefix)
+        if stats:
+            slot_stats.append(stats)
+
+    total_power, max_speed = army_stats(slot_stats)
+
+    # Add slot button (if less than 7)
+    if num_slots < 7:
+        plus_button = st.button(
+            "＋",
+            key=f"{key_prefix}_add_slot",
+            help="Add another army slot (up to 7)",
+            use_container_width=True,
+            type="secondary"
+        )
+        # Make the button bigger by adding a class via JS hack
+        st.markdown(
+            f"""<script>
+            var btns = window.parent.document.querySelectorAll('button[kind="secondary"]');
+            for (var i=0; i<btns.length; ++i) {{
+                if (btns[i].innerText.trim() === "＋") {{
+                    btns[i].classList.add("plus-btn");
+                }}
+            }}
+            </script>""",
+            unsafe_allow_html=True
+        )
+        if plus_button:
+            st.session_state[slots_key] += 1
+            st.rerun()
+
+    return total_power, max_speed
 
 # --- MAIN CONTENT ---
 col_own_body, col_enemy_body = st.columns(2, gap="large")
