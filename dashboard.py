@@ -111,6 +111,18 @@ div.stButton > button.plus-btn:hover {
     border-color: #2c7be5 !important;
     color: #185a9d !important;
 }
+.reset-btn {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+    border: 1px solid #f5c2c7 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.reset-btn:hover {
+    background-color: #f1aeb5 !important;
+    border-color: #842029 !important;
+}
 @media (max-width: 1100px) {
     .army-card { min-height: 0; }
 }
@@ -144,10 +156,53 @@ def get_abilities(special_abilities):
         return None
     return ", ".join(special_abilities.split(","))
 
+# --- RESET FUNCTION ---
+def reset_dashboard():
+    # Reset slots count
+    st.session_state["own_slots"] = 1
+    st.session_state["enemy_slots"] = 1
+    
+    # Clear all unit selections and counts
+    keys_to_clear = []
+    for key in st.session_state.keys():
+        if key.startswith("own_unit_") or key.startswith("enemy_unit_") or \
+           key.startswith("own_count_") or key.startswith("enemy_count_"):
+            keys_to_clear.append(key)
+    
+    for key in keys_to_clear:
+        if key.endswith("_1"):  # Keep the first slot but reset its values
+            if key.endswith("unit_1"):
+                st.session_state[key] = ""
+            elif key.endswith("count_1"):
+                st.session_state[key] = 0
+        else:  # Remove other slots completely
+            del st.session_state[key]
+
 # --- HEADER ---
 with st.container():
     st.markdown('<div class="header-bar">', unsafe_allow_html=True)
-    st.markdown('<div class="header-title">🛡️ Heroes of Might and Magic III Army Power Dashboard</div>', unsafe_allow_html=True)
+    col_title, col_reset = st.columns([5, 1])
+    with col_title:
+        st.markdown('<div class="header-title">🛡️ Heroes of Might and Magic III Army Power Dashboard</div>', unsafe_allow_html=True)
+    with col_reset:
+        st.markdown('<div class="header-title"></div>', unsafe_allow_html=True)
+        reset_button = st.button("Reset Dashboard", key="reset_dashboard", type="primary", use_container_width=True)
+        # Add the custom class to the reset button
+        st.markdown(
+            """<script>
+            var btns = window.parent.document.querySelectorAll('button[kind="primary"]');
+            for (var i=0; i<btns.length; ++i) {
+                if (btns[i].innerText.trim() === "Reset Dashboard") {
+                    btns[i].classList.add("reset-btn");
+                }
+            }}
+            </script>""",
+            unsafe_allow_html=True
+        )
+        if reset_button:
+            reset_dashboard()
+            st.rerun()
+    
     col_own, col_enemy = st.columns(2)
     own_army_title = '<div class="header-army">Own Army</div>'
     enemy_info = """
