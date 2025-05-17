@@ -14,7 +14,6 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Future Directions](#future-directions)
-- [Epilogue](#epilogue)
 
 ---
 
@@ -27,9 +26,11 @@ This tool is for those who do not remember every creature's stats, for the tacti
 Each army is a procession of seven empty slots, yearning to be filled. Here, you will inscribe the names of units: Pikeman, Angel, Peasant-names that echo through the halls of memory like the footsteps of a tax collector in an abandoned village. You will enter their numbers, as if counting the grains of sand in an hourglass that measures not time, but the slow erosion of hope.
 
 And then, the Power Score:  
+
 $$
 \text{Power Score} = (\text{Attack} + \text{Defence} + \text{Speed} + \frac{\text{Min Damage} + \text{Max Damage}}{2}) \times \text{Health}
 $$
+
 A formula so simple, so profound, it mocks the futility of all human endeavor.
 
 ---
