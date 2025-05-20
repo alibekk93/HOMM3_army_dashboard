@@ -1,5 +1,7 @@
 # HOMM3 Army Power Dashboard
 
+**[Dashboard hosted on Streamlit](https://homm3armydashboard-gwjkb4pzz4hgnsa4rz5znm.streamlit.app/)**
+
 > In the beginning, there was only chaos and the Dashboard-a shimmering portal of numbers, squatting at the center of your screen, gazing back with the same blank, expectant stare as a peasant conscript facing a Black Dragon. Welcome, traveler, to the Army Power Dashboard: a Streamlit app where the arithmetic of war becomes a cosmic ballet of stats, spreadsheets, and existential dread.
 
 ---
